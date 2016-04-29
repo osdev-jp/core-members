@@ -2,15 +2,15 @@
 
 # Visual Studio Code で OS 開発をする
 
-Visual Studio Code（以下 VSCode）は Microsoft が 2015 年 4 月にリリースした、ソースコード編集用のテキストエディタです。同社の有名な統合開発環境 Visual Studio は全部入りですが、VSCode はシンプルです。ちなみにオープンソースで開発されていて、最近の Microsoft はすごいですね。起動がとても軽いのにソースコードの補完機能を使えたりします。
+Visual Studio Code（以下 VSCode）は Microsoft が 2015 年 4 月にリリースした、ソースコード編集用のテキストエディタです。同社の有名な統合開発環境 Visual Studio は全部入りですが、VSCode はシンプルです。"Visual Studio" という名前ではありますが、Linux でも Mac OS X でも動きます。しかもオープンソースで開発されていて、最近の Microsoft の凄さを感じます。さらに、起動がとても軽いのにソースコードの補完機能を使えたりします。
 
 ソースコードの補完機能というのは、変数名の一部を入力するだけで全体を補完してくれたり、構造体型の変数の直後で `.` や `->` を入力するとメンバの一覧を出してくれるような機能のことです。こんな機能があったらとても便利ではないでしょうか。VSCode でそれができますので（しかもとても快適に！）、試してみる価値はあるはずです。
-
-<!--more-->
 
 ## 対象読者
 
 VSCode を使って補完を効かせながら OS のソースコードを書きたい方を対象とします。Linux の基本的なコマンドを知っていることを前提としています。Linux 上で VSCode を動かしたい方はもちろんですが、Windows 上の VSCode から Linux に置いてあるソースコードを編集したい方も対象です。
+
+<!--more-->
 
 ## Linux 上で直接ソースコードを編集する方法
 
@@ -151,7 +151,7 @@ Windows の VSCode で補完機能を使うには、Windows に Clang をイン�
 
 インストールは [LLVM Clang の Windows へのインストールと使い方 - プログラマーズ雑記帳](http://yohshiy.blog.fc2.com/blog-entry-294.html) あたりを参考にしてください。インストーラをクリックしていくだけです。ただし、記事によれば事前に Visual Studio （おそらく VSCode ではダメ）をインストールしておく必要があるようです。筆者のパソコンにはすでに Visual Studio 2015 がインストールされていたので、検証することはできませんでした。依存関係が自動で入らないのは、Ubuntu の APT に慣れてしまった筆者としては辛い世界です。
 
-一点、インストールの途中で "for all users" でも "for current user" でもいいので、PATH に追加しておくと楽です。ただ、追加せずとも、この後 VSCode をインストール後に User Settings に次のように設定するだけですけどね。
+インストールの段階で clang コマンドを PATH に通しておくと、後から clang.executable の設定をしなくていいので楽です。インストールの途中で "for all users" か "for current user" を選択すると自動で PATH が通ります。ただ、もし PATH を通さなかったとしても VSCode のインストール後に User Settings へ次の設定を追加すれば問題ありません。
 
     "clang.executable": "C:\\Program Files\\LLVM\\bin\\clang++.exe"
 
