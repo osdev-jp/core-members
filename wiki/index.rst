@@ -6,16 +6,23 @@
 osdev-jp core へようこそ
 ========================
 
-Contents:
+本サイト "osdev-jp core" は、osdev-jp のコアメンバが執筆した技術文書を掲載する場所です。OS 開発に役立つ記事ばかりを扱っています。
+
+
+メインコンテンツ
+----------------
 
 .. toctree::
    :maxdepth: 2
 
+   general/references
    2016/vagrant
    2016/os-development-by-vscode/os-development-by-vscode
 
-検索
-----
+その他
+------
 
-* :ref:`search`
+.. toctree::
+   :maxdepth: 2
 
+   about_osdev-jp
