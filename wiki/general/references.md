@@ -68,6 +68,12 @@ These documents will help your operating system development.
 
   BIOSの後継となるファームウエアインターフェイス。UEFI搭載PCでブートローダを書く際には必須
 
+## AHCI
+
+- [Serial ATA AHCI: Specification, Rev. 1.3.1](http://www.intel.com/content/www/us/en/io/serial-ata/serial-ata-ahci-spec-rev1-3-1.html)
+
+  IDE に代わる SATA 用のコントローラ。IDE でも SATA を読み書きすることは可能だが、より新しい規格である AHCI を使えば間違いないだろう。
+
 ## ハードウエア全般
 
 - [OADG テクニカルリファレンス（ハードウエア）](http://web.archive.org/web/20090815135508/http://www.oadg.or.jp/techref/oadghwd.pdf)
