@@ -57,12 +57,12 @@ Conf と Build を除くと、その他のディレクトリは「パッケー�
 次に、AppPkg の構造を見てみます。
 
     AppPkg/
-      AppPkg.dec        パッケージ宣言（declaration）ファイル
-      AppPkg.dsc        パッケージ記述（description）ファイル
-      Applications/
-        Hello/          Hello モジュールディレクトリ
-          Hello.c
-          Hello.inf     モジュールの定義ファイル
+      AppPkg.dec        パッケージ宣言（declaration）ファイル
+      AppPkg.dsc        パッケージ記述（description）ファイル
+      Applications/
+        Hello/          Hello モジュールディレクトリ
+          Hello.c
+          Hello.inf     モジュールの定義ファイル
 
 パッケージとして構成するのに必要なのはパッケージ宣言ファイルとパッケージ記述ファイルです。パッケージ宣言ファイルは、パッケージ名を定義したり、パッケージ内のソースコードから利用する定数を定義したりするのに使います。パッケージ記述ファイルは、出力ディレクトリ名やサポートされるアーキテクチャ、サポートされるビルドターゲットなど、ビルドに関する設定を含みます。これら 2 つのファイルについて、詳しくは後述します。
 
