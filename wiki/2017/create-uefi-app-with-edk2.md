@@ -181,4 +181,36 @@ LibraryClasses セクションには、そのパッケージ内のモジュー�
 
 ## .inf : モジュール定義ファイル
 
-ENTRY_POINT UefiMain, EfiMain 挙動が違う話
+個々のモジュールの名前、モジュールの種別、構成するソースコードなどを指定するファイルです。Hello World モジュールの例を示します。
+
+    [Defines]
+      INF_VERSION                    = 0x00010006
+      BASE_NAME                      = Hello
+      FILE_GUID                      = 430e7e71-c5af-408d-aa22-795ee53ae750
+      MODULE_TYPE                    = UEFI_APPLICATION
+      VERSION_STRING                 = 0.1
+      ENTRY_POINT                    = UefiMain
+
+    [Sources]
+      Hello.c
+
+    [Packages]
+      MdePkg/MdePkg.dec
+
+    [LibraryClasses]
+      UefiLib
+      UefiApplicationEntryPoint
+
+Defines セクションはまあ今まで見てきたのから類推できると思います。`BASE_NAME` はモジュール名を指定します。`FILE_GUID` は例にもれず `uuiegen` で生成します。
+
+`MODULE_TYPE` はモジュールの種別を設定します。edk2 のリポジトリを眺めてみると、取り得る値として `UEFI_APPLICATION`, `DXE_DRIVER`, `UEFI_DRIVER`, `BASE`, `PEIM` などがあることが分かります。それぞれどんな意味なのか筆者はよく分かっていませんが、UEFI アプリを作りたい場合は `UEFI_APPLICATION` にしておけばいいはずです。
+
+`ENTRY_POINT` にはメイン関数となる関数名を設定します。ここに設定した名前の関数がアプリケーションの開始点となります。基本的にどんな名前でもいいのですが、`EfiMain` だけは使えないようです。それ以外の名前にしてください。ここではよくサンプルで見かける `UefiMain` という名前にしてみました。
+
+Souces セクションにはこのモジュールを構成するソースコードを列挙します。
+
+Packages セクションでは、このモジュールが依存するパッケージを列挙します。ここに列挙されたパッケージからヘッダファイルが検索されてモジュールのコンパイルに利用されます。
+
+LibraryClasses セクションでは、このモジュールが依存するライブラリを列挙します。Packages セクションと役割は若干似ていますが、LibraryClasses セクションの情報はリンクするライブラリを特定するのに使われます。
+
+## ビルドとテスト
