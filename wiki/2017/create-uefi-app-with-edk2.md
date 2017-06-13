@@ -213,4 +213,68 @@ Packages セクションでは、このモジュールが依存するパッケ�
 
 LibraryClasses セクションでは、このモジュールが依存するライブラリを列挙します。Packages セクションと役割は若干似ていますが、LibraryClasses セクションの情報はリンクするライブラリを特定するのに使われます。
 
+ここでは `UefiLib` と `UefiApplicationEntryPoint` をリンクするよう指示しています。前者は `Print` 関数を利用するために必要なライブラリです。後者はスタンドアロンの UEFI アプリを構成するのに必要なライブラリです。
+
+スタンドアロンの UEFI アプリは UEFI Shell が起動する前に起動することができます。OS のブートローダーを作る場合などはスタンドアロンとして構成します。ところで `UefiApplicationEntryPoint` と似たようなライブラリに `ShellCEntryLib` があり、例えば AppPkg/Applications/Hello/Hello.inf で使用されています。`UefiApplicationEntryPoint` の代わりにこのライブラリをリンクすると、作成したアプリは UEFI Shell から起動するタイプのアプリとなります。この 2 つのライブラリは同名の関数を提供しているので、どちらかしかリンクすることはできません。
+
+## Hello.c
+
+おっと、Hello World を作るのに最後の大事なピースを紹介し忘れるところでした。ソースコードです。
+
+    #include  <Uefi.h>
+    #include  <Library/UefiLib.h>
+
+    EFI_STATUS
+    EFIAPI
+    UefiMain (
+        IN EFI_HANDLE ImageHandle,
+        IN EFI_SYSTEM_TABLE *SystemTable
+        )
+    {
+      Print(L"Hello EDK II.\n");
+      while (1);
+      return 0;
+    }
+
+スタンドアロンの UEFI アプリのエントリポイントは一般的な C 言語プログラムと違い、`EFI_HANDLE` と `EFI_SYSTEM_TABLE *` を引数として受け取ります。EDK II に含まれる CryptoPkg/Application/Cryptest/Cryptest.c はスタンドアロンのアプリのサンプルソースであり、エントリポイントの引数の型と戻り値の型は同じですね。
+
+`Print` 関数を使うには `Library/Uefilib.h` のインクルードと UefiLib のリンクが必要です。品川先生のブログを読むと、`Print` 関数を使わないで文字列を表示する方法が紹介されています。実験してみると面白いかもしれません。
+
 ## ビルドとテスト
+
+さて、ここまできたら target.txt に設定してビルドすることができます。Ubuntu 16.04 であれば、次のような設定値にすれば良いでしょう。
+
+| 設定項目 | 設定値 |
+|---------|--------|
+| `ACTIVE_PLATFORM` | MyPkg |
+| `TARGET` | RELEASE |
+| `TARGET_ARCH` | X64 |
+| `TOOL_CHAIN_TAG` | GCC5 |
+
+この設定が完了したら、edksetup.sh を読み込んだシェル上で `build` コマンドを実行します。
+
+    $ build
+    Build environment: Linux-4.4.0-66-generic-x86_64-with-Ubuntu-16.04-xenial
+    Build start time: 08:24:03, Jun.14 2017
+
+    WORKSPACE        = /home/uchan/workspace/github.com/tianocore/edk2
+    ECP_SOURCE       = /home/uchan/workspace/github.com/tianocore/edk2/EdkCompatibilityPkg
+    EDK_SOURCE       = /home/uchan/workspace/github.com/tianocore/edk2/EdkCompatibilityPkg
+    EFI_SOURCE       = /home/uchan/workspace/github.com/tianocore/edk2/EdkCompatibilityPkg
+    EDK_TOOLS_PATH   = /home/uchan/workspace/github.com/tianocore/edk2/BaseTools
+    CONF_PATH        = /home/uchan/workspace/github.com/tianocore/edk2/Conf
+
+
+    Architecture(s)  = X64
+    Build target     = RELEASE
+    Toolchain        = GCC5
+
+    Active Platform          = /home/uchan/workspace/github.com/tianocore/edk2/MyPkg/MyPkg.dsc
+
+    ...中略...
+
+    - Done -
+    Build end time: 08:24:05, Jun.14 2017
+    Build total time: 00:00:03
+
+
