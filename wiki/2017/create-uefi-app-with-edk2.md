@@ -93,7 +93,91 @@ target.txt を開くといくつかの設定項目があることが分かりま
 
 パッケージ名とその GUID を設定するのが主目的のファイルです。ほぼ最小のファイルは次のようになります。
 
+    [Defines]
+      DEC_SPECIFICATION              = 0x00010005
+      PACKAGE_NAME                   = MyPkg
+      PACKAGE_GUID                   = d6a78c81-0d7f-4b46-af1d-e6ed44e5ffaa
+      PACKAGE_VERSION                = 0.1
+
+`PACKAGE_GUID` は `uuidgen` コマンドで生成したものに置き換えてください。`DEC_SPECIFICATION` は多分、.dec ファイルのフォーマットのバージョン番号だろうと思います。他のパッケージの設定値と同じにしておけば問題ないと思います。
+
+`PACKAGE_NAME` と `PACKAGE_VERSION` はご自由にどうぞ。
+
 ## .dsc : パッケージ記述ファイル
+
+主にパッケージのビルド設定を書くファイルです。ほぼ最小のファイルは次のようになります。
+
+    [Defines]
+      PLATFORM_NAME                  = MyPkg
+      PLATFORM_GUID                  = 75dd174f-907b-4f8f-8afa-f0029d98ed5a
+      PLATFORM_VERSION               = 0.1
+      DSC_SPECIFICATION              = 0x00010005
+      OUTPUT_DIRECTORY               = Build/MyPkg$(ARCH)
+      SUPPORTED_ARCHITECTURES        = IA32|X64
+      BUILD_TARGETS                  = DEBUG|RELEASE|NOOPT
+
+      DEFINE DEBUG_ENABLE_OUTPUT     = FALSE
+
+    [LibraryClasses]
+      # Entry point
+      UefiApplicationEntryPoint|MdePkg/Library/UefiApplicationEntryPoint/UefiApplicationEntryPoint.inf
+
+      # Common Libraries
+      BaseLib|MdePkg/Library/BaseLib/BaseLib.inf
+      BaseMemoryLib|MdePkg/Library/BaseMemoryLib/BaseMemoryLib.inf
+      PcdLib|MdePkg/Library/BasePcdLibNull/BasePcdLibNull.inf
+      UefiBootServicesTableLib|MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib.inf
+      !if $(DEBUG_ENABLE_OUTPUT)
+        DebugLib|MdePkg/Library/UefiDebugLibConOut/UefiDebugLibConOut.inf
+        DebugPrintErrorLevelLib|MdePkg/Library/BaseDebugPrintErrorLevelLib/BaseDebugPrintErrorLevelLib.inf
+      !else   ## DEBUG_ENABLE_OUTPUT
+        DebugLib|MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull.inf
+      !endif  ## DEBUG_ENABLE_OUTPUT
+
+      UefiLib|MdePkg/Library/UefiLib/UefiLib.inf
+      PrintLib|MdePkg/Library/BasePrintLib/BasePrintLib.inf
+      MemoryAllocationLib|MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib.inf
+      UefiRuntimeServicesTableLib|MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib.inf
+      DevicePathLib|MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib.inf
+
+    [Components]
+      MyPkg/Hello/Hello.inf
+
+最小といいつつ結構大きいですね。各部分について説明していきます。
+
+### Defines セクション
+
+Defines セクションはビルドの全体的な設定です。
+
+たくさん出てくる「プラットフォーム」とは、どうやら「パッケージ」とほぼ同じ意味らしいです。取り敢えず筆者はパッケージ＝プラットフォームという認識で居ますが、今のところ困っていません。
+
+`PLATFORM_GUID` は例のごとく `uuidgen` コマンドで生成した値を設定してください。`DSC_SPECIFICATION` は他の .dsc ファイルを参考に。`PLATFORM_NAME` と `PLATFORM_VERSION` はご自由に。
+
+`OUTPUT_DIRECTORY` はどこに成果物を書き出すかを指定します。`$WORKSPACE` を基準としたパスを書きます。
+
+`SUPPORTED_ARCHITECTURES` と `BUILD_TARGETS` はそれぞれ、このパッケージがサポートするアーキテクチャとビルドターゲットの選択肢を列挙します。この選択肢から選んだ値を target.txt の `TARGET_ARCH` と `TARGET` に設定することになります。
+
+### LibraryClasses セクション
+
+LibraryClasses セクションでは、ライブラリ名と実際に使用するライブラリ実体のマッピングを定義します。同じような機能を提供するライブラリが複数存在する場合、ここのマッピングを切り替えることでどちらのライブラリを使用するかを選択できます。例えば
+
+    DebugLib|MdePkg/Library/UefiDebugLibConOut/UefiDebugLibConOut.inf
+
+であれば、DebugLib という名前で MdePkg/Library/UefiDebugLibConOut/UefiDebugLibConOut.inf というライブラリを指定しています。パッケージ内のモジュール（今回の例で言えば Hello モジュール）が DebugLib という名前でライブラリを参照したとき、実際には UefiDebugLibConOut.inf ライブラリが使用される、というわけです。
+
+上記の代わりに次のように指定したとします。
+
+    DebugLib|MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull.inf
+
+すると、モジュールは相変わらず DebugLib を参照していても、その実体は BaseDebugLibNull.inf に切り替わります。
+
+例の .dsc ファイルでは、このマッピングの仕組みと条件式を組み合わせて使っています。`DEBUG_ENABLE_OUTPUT` が真の場合、DebugLib は本来のデバッグライブラリを指し、偽の場合は空のライブラリに切り替わります。`DEBUG_ENABLE_OUTPUT` 自体は Defines セクションで定義された定数です。
+
+LibraryClasses セクションには、そのパッケージ内のモジュールが必要とするライブラリを、依存関係も含めてすべて列挙する必要があります。そのため、Hello World でさえ多くのライブラリの列挙が必要になってしまっています。慣れましょう。
+
+### Components セクション
+
+ここは単にパッケージに含まれるモジュール（ライブラリ、ドライバ、アプリ）の .inf ファイルを列挙します。列挙したものがビルドされる、という理解で良いと思います。
 
 ## .inf : モジュール定義ファイル
 
