@@ -240,7 +240,7 @@ LibraryClasses セクションでは、このモジュールが依存するラ�
 
 `Print` 関数を使うには `Library/Uefilib.h` のインクルードと UefiLib のリンクが必要です。品川先生のブログを読むと、`Print` 関数を使わないで文字列を表示する方法が紹介されています。実験してみると面白いかもしれません。
 
-## ビルドとテスト
+## ビルド
 
 さて、ここまできたら target.txt に設定してビルドすることができます。Ubuntu 16.04 であれば、次のような設定値にすれば良いでしょう。
 
@@ -277,4 +277,14 @@ LibraryClasses セクションでは、このモジュールが依存するラ�
     Build end time: 08:24:05, Jun.14 2017
     Build total time: 00:00:03
 
+最後が Done となればビルド完了です。失敗時は Failed となります。
 
+## テスト実行
+
+ビルド成果物は Build/MyPkgX64/RELEASE_GCC5/X64/Hello.efi にあるはずです。これを QEMU で起動させる方法をご紹介します。
+
+QEMU で UEFI アプリを動作させるには、OVMF と呼ばれる UEFI ファームウェアを入手する必要があります。幸いなことに EDK II は OVMF を含んでいるので、我々はすぐにビルドすることができます。
+
+OVMF をビルドするには、target.txt で `ACTIVE_PLATFORM` に `OvmfPkg/OvmfPkgX64.dsc` を指定します。それで `build` コマンドを実行するだけです。
+
+ビルドが終わると Build/OvmfX64/RELEASE_GCC5/FV/OVMF.fd に目的の OVMF ファームウェアが生成されているはずです。
