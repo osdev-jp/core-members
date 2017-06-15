@@ -74,12 +74,16 @@ Hello.inf は Hello モジュールの定義ファイルです。このファイ
 
 target.txt を開くといくつかの設定項目があることが分かります。重要な設定項目を説明します。
 
-| 設定項目 | 設定値 |
-|---------|--------|
-| `ACTIVE_PLATFORM` | ビルド対象のパッケージの .dsc ファイル。 |
-| `TARGET` | DEBUG、RELEASE、NOOPT、UserDefined のいずれか。NOOPT は最適化をせずビルドするオプションらしい。 |
-| `TARGET_ARCH` | どのアーキテクチャ向けのバイナリを作るか。IA32 とか X64 とか ARM とか。 |
-| `TOOL_CHAIN_TAG` | tools_def.txt の "Supported Tool Chains" からビルドに用いるツールチェインを選ぶ。VS2015 とか GCC5 とか。 |
+```eval_rst
+===================  ======
+設定項目             設定値
+===================  ======
+``ACTIVE_PLATFORM``  ビルド対象のパッケージの .dsc ファイル。
+``TARGET``           DEBUG、RELEASE、NOOPT、UserDefined のいずれか。NOOPT は最適化をせずビルドするオプションらしい。
+``TARGET_ARCH``      どのアーキテクチャ向けのバイナリを作るか。IA32 とか X64 とか ARM とか。
+``TOOL_CHAIN_TAG``   tools_def.txt の "Supported Tool Chains" からビルドに用いるツールチェインを選ぶ。VS2015 とか GCC5 とか。
+===================  ======
+```
 
 ## 独自パッケージの作成
 
@@ -244,12 +248,16 @@ LibraryClasses セクションでは、このモジュールが依存するラ�
 
 さて、ここまできたら target.txt に設定してビルドすることができます。Ubuntu 16.04 であれば、次のような設定値にすれば良いでしょう。
 
-| 設定項目 | 設定値 |
-|---------|--------|
-| `ACTIVE_PLATFORM` | MyPkg |
-| `TARGET` | RELEASE |
-| `TARGET_ARCH` | X64 |
-| `TOOL_CHAIN_TAG` | GCC5 |
+```eval_rst
+===================  ======
+設定項目             設定値
+===================  ======
+``ACTIVE_PLATFORM``  MyPkg
+``TARGET``           RELEASE
+``TARGET_ARCH``      X64
+``TOOL_CHAIN_TAG``   GCC5
+===================  ======
+```
 
 この設定が完了したら、edksetup.sh を読み込んだシェル上で `build` コマンドを実行します。
 
