@@ -285,6 +285,17 @@ LibraryClasses セクションでは、このモジュールが依存するラ�
 
 QEMU で UEFI アプリを動作させるには、OVMF と呼ばれる UEFI ファームウェアを入手する必要があります。幸いなことに EDK II は OVMF を含んでいるので、我々はすぐにビルドすることができます。
 
-OVMF をビルドするには、target.txt で `ACTIVE_PLATFORM` に `OvmfPkg/OvmfPkgX64.dsc` を指定します。それで `build` コマンドを実行するだけです。
+OVMF をビルドするには、target.txt で `ACTIVE_PLATFORM` に `OvmfPkg/OvmfPkgX64.dsc` を指定します。それで `build` コマンドを実行するだけです。ビルドが終わると Build/OvmfX64/RELEASE_GCC5/FV/OVMF.fd に目的の OVMF ファームウェアが生成されているはずです。
 
-ビルドが終わると Build/OvmfX64/RELEASE_GCC5/FV/OVMF.fd に目的の OVMF ファームウェアが生成されているはずです。
+さて、これでファームウェアの準備はできました。次は自作した UEFI アプリを含む、FAT でフォーマットされたディスクイメージを作成します。といっても、実際にディスクイメージを作るのはちょっと面倒なので、ここでは QEMU の便利な機能を使います。それは、あるディレクトリ以下を仮想的にディスクとして扱えるようにする機能です。
+
+ディスクのルートディレクトリとして振る舞うディレクトリを用意します。名前はなんでもいいですが、ここでは image とします。そして、自作の UEFI アプリを自動起動させるためには、/EFI/BOOT/BOOTX64.efi としてその UEFI アプリを配置する必要があります。具体的なコマンドを示します。
+
+    $ make -p image/EFI/BOOT
+    $ cp Build/MyPkgX64/RELEASE_GCC5/X64/Hello.efi image/EFI/BOOT/BOOTX64.efi
+
+これで、QEMU に与えるディスク（として振る舞うディレクトリ）の準備ができました。QEMU を起動させてみましょう。
+
+    $ qemu-system-x86_64 -bios Build/OvmfX64/RELEASE_GCC5/FV/OVMF.fd -hda fat:rw:image
+    
+"TianoCore" というロゴが表示され、しばらく待つと `Print` 関数に指定したメッセージが表示されるはずです。これでめでたく EDK II による UEFI アプリの作成と QEMU による実験のやり方が分かりました。おめでとうございます！
