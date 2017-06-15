@@ -18,6 +18,7 @@ osdev-jp core へようこそ
    general/references
    2016/vagrant
    2016/os-development-by-vscode/os-development-by-vscode
+   2017/create-uefi-app-with-edk2
 
 その他
 ------
