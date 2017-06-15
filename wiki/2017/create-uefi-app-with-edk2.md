@@ -1,4 +1,4 @@
-2017/06/13 by uchan
+2017/06/15 by uchan
 
 # EDK II で UEFI アプリケーションを作る
 
@@ -299,3 +299,11 @@ OVMF をビルドするには、target.txt で `ACTIVE_PLATFORM` に `OvmfPkg/Ov
     $ qemu-system-x86_64 -bios Build/OvmfX64/RELEASE_GCC5/FV/OVMF.fd -hda fat:rw:image
     
 "TianoCore" というロゴが表示され、しばらく待つと `Print` 関数に指定したメッセージが表示されるはずです。これでめでたく EDK II による UEFI アプリの作成と QEMU による実験のやり方が分かりました。おめでとうございます！
+
+## UEFI Shell
+
+UEFI を実験する場合に UEFI Shell を使いたくなることがあります。UEFI Shell とは UEFI に組み込まれているシェルで、基本的には `ShellCEntryLib` をリンクした UEFI アプリを起動するためのものです。また、接続されたディスクのファイルを確認したり、システムのメモリマップを取得したり、パーティションプログラムを実行したりなど、いろいろな機能が備わっています。
+
+QEMU を起動させて何もしないでいると、自動で BOOTX64.efi が起動してしまいます。UEFI Shell を使用するためには、QEMU 起動直後に F2 を連打し、ブートメニューを表示させ、"Boot Manager" メニューを選び、"EFI Internal Shell" を選びます。
+
+UEFI Shell の使い方については [UEFI シェル - ArchWiki](https://wiki.archlinuxjp.org/index.php/Unified_Extensible_Firmware_Interface#UEFI_.E3.82.B7.E3.82.A7.E3.83.AB) が詳しいです。
