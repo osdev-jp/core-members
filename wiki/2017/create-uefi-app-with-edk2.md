@@ -321,7 +321,7 @@ UEFI に詳しい人によると、分離された形式のほうが新しい形
 ここまでできたら QEMU を起動させてみましょう。
 
     $ qemu-system-x86_64 \
-    -drive if=pflash,format=raw,readonly,file=./OVMF_CODE.fd \
+    -drive if=pflash,format=raw,readonly,file=Build/OvmfX64/RELEASE_GCC5/FV/OVMF_CODE.fd \
     -drive if=pflash,format=raw,file=./OVMF_VARS.fd \
     -drive if=ide,file=fat:image,index=0,media=disk
 
@@ -335,6 +335,7 @@ drive 指定はちょっと複雑ですね。詳しくは `man qemu-system-x86_6
     - raw は単純なディスクイメージであることを示します。ディスクの中身がそのままファイルになったものです。
     - 他には qcow2 などのフォーマットもあります。大容量のディスクイメージ用途などによく使われます。
     - QEMU はディスクイメージからフォーマットを推測する機能があるので、raw 以外の場合は指定を省略することが多い印象です。
+    - オプションはカンマ区切りで複数指定できます。OVMF_CODE.fdは書き換わることはないので読み取り専用としています。
 - file: ディスクイメージのファイル名を指定します。
     - 基本的にはファイルへのパスを指定します。
     - `fat:` オプションを指定すると、あるディレクトリ以下を FAT フォーマットのディスクであるかのように扱うことができます。
