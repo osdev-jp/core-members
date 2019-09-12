@@ -311,7 +311,7 @@ UEFI に詳しい人によると、分離された形式のほうが新しい形
 
 ディスクのルートディレクトリとして振る舞うディレクトリを用意します。名前はなんでもいいですが、ここでは image とします。そして、自作の UEFI アプリを自動起動させるためには、/EFI/BOOT/BOOTX64.efi としてその UEFI アプリを配置する必要があります。具体的なコマンドを示します。
 
-    $ make -p image/EFI/BOOT
+    $ mkdir -p image/EFI/BOOT
     $ cp Build/MyPkgX64/RELEASE_GCC5/X64/Hello.efi image/EFI/BOOT/BOOTX64.efi
 
 これで、QEMU に与えるディスク（として振る舞うディレクトリ）の準備ができました。次に OVMF_VARS.fd をコピーしておきます。なぜなら、UEFI の設定変更で書き換わってしまうからです。
