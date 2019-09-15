@@ -355,3 +355,7 @@ UEFI を実験する場合に UEFI Shell を使いたくなることがありま
 QEMU を起動させて何もしないでいると、自動で BOOTX64.efi が起動してしまいます。UEFI Shell を使用するためには、QEMU 起動直後に F2 を連打し、ブートメニューを表示させ、"Boot Manager" メニューを選び、"EFI Internal Shell" を選びます。
 
 UEFI Shell の使い方については [UEFI シェル - ArchWiki](https://wiki.archlinuxjp.org/index.php/Unified_Extensible_Firmware_Interface#UEFI_.E3.82.B7.E3.82.A7.E3.83.AB) が詳しいです。
+
+## 参考になる情報
+
+EDK II は UEFI の規格に基づいて作られていますから，各種 API の仕様などは UEFI 規格書を見ると詳しく載っています。 https://uefi.org/specifications から "UEFI Specification Version X.Y" をダウンロードして読んでください。
