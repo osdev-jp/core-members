@@ -20,9 +20,13 @@ These documents will help your operating system development.
 
 ## Intel Chipset
 
+- [Intel® 400 Series Chipset On-Package Platform Controller Hub Online Register Database](https://edc.intel.com/content/www/us/en/design/products-and-solutions/processors-and-chipsets/comet-lake-u/intel-400-series-chipset-on-package-platform-controller-hub-register-database/)
+
+  各種I/Oデバイスのレジスタマップ等が記載されている。Intel 400 シリーズチップセット用。Web 版で見やすい。
+
 - [Intel® I/O Controller Hub 8 (Intel® ICH8) Family Datasheet](http://www.intel.co.jp/content/www/jp/ja/io/intel-io-controller-hub-8-datasheet.html)
 
-  各種I/Oデバイスのレジスタマップ等が記載されている。
+  各種I/Oデバイスのレジスタマップ等が記載されている。ICH8 用。
 
 ## Intel NIC
 
